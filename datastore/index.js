@@ -54,7 +54,6 @@ exports.readOne = (id, callback) => {
 
 exports.update = (id, text, callback) => {
   let todoPath = path.join(exports.dataDir, id.toString() + '.txt');
-  var item = items[id];
 
   if (fs.existsSync(todoPath)) {
     fs.writeFile(todoPath, text, (err) => {
@@ -71,13 +70,19 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
+  let todoPath = path.join(exports.dataDir, id.toString() + '.txt');
+
+  if (fs.existsSync(todoPath)) {
+    fs.unlink(todoPath, (err) => {
+      if (err) {
+        callback(new Error(`Cannot delete item with id: ${id}`));
+      } else {
+        callback(`Deleted item with id: ${id}`);
+      }
+    });
+
   } else {
-    callback();
+    callback('non existent id');
   }
 };
 

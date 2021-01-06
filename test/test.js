@@ -193,31 +193,31 @@ describe('todos', () => {
       todos.create('delete this todo', done);
     });
 
-    // it('should not change the counter', (done) => {
-    //   todos.delete('00001', (err) => {
-    //     const counterFileContents = fs.readFileSync(counter.counterFile).toString();
-    //     expect(counterFileContents).to.equal('00001');
-    //     done();
-    //   });
-    // });
+    it('should not change the counter', (done) => {
+      todos.delete('00001', (err) => {
+        const counterFileContents = fs.readFileSync(counter.counterFile).toString();
+        expect(counterFileContents).to.equal('00001');
+        done();
+      });
+    });
 
-    // it('should delete todo file by id', (done) => {
-    //   todos.delete('00001', (err) => {
-    //     const todoExists = fs.existsSync(path.join(todos.dataDir, '00001.txt'));
-    //     expect(todoExists).to.be.false;
-    //     done();
-    //   });
-    // });
+    it('should delete todo file by id', (done) => {
+      todos.delete('00001', (err) => {
+        const todoExists = fs.existsSync(path.join(todos.dataDir, '00001.txt'));
+        expect(todoExists).to.be.false;
+        done();
+      });
+    });
 
-    // it('should return an error for non-existant id', (done) => {
-    //   const initalTodoCount = fs.readdirSync(todos.dataDir).length;
-    //   todos.delete('07829', (err) => {
-    //     const currentTodoCount = fs.readdirSync(todos.dataDir).length;
-    //     expect(currentTodoCount).to.equal(initalTodoCount);
-    //     expect(err).to.exist;
-    //     done();
-    //   });
-    // });
+    it('should return an error for non-existant id', (done) => {
+      const initalTodoCount = fs.readdirSync(todos.dataDir).length;
+      todos.delete('07829', (err) => {
+        const currentTodoCount = fs.readdirSync(todos.dataDir).length;
+        expect(currentTodoCount).to.equal(initalTodoCount);
+        expect(err).to.exist;
+        done();
+      });
+    });
   });
 
 });
