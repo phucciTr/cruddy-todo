@@ -135,23 +135,23 @@ describe('todos', () => {
   });
 
   describe('readOne', () => {
-    // it('should return an error for non-existant todo', (done) => {
-    //   todos.readOne('notAnId', (err, todo) => {
-    //     expect(err).to.exist;
-    //     done();
-    //   });
-    // });
+    it('should return an error for non-existant todo', (done) => {
+      todos.readOne('notAnId', (err, todo) => {
+        expect(err).to.exist;
+        done();
+      });
+    });
 
-    // it('should find a todo by id', (done) => {
-    //   const todoText = 'buy chocolate';
-    //   todos.create(todoText, (err, createdTodo) => {
-    //     const id = createdTodo.id;
-    //     todos.readOne(id, (err, readTodo) => {
-    //       expect(readTodo).to.deep.equal({ id, text: todoText });
-    //       done();
-    //     });
-    //   });
-    // });
+    it('should find a todo by id', (done) => {
+      const todoText = 'buy chocolate';
+      todos.create(todoText, (err, createdTodo) => {
+        const id = createdTodo.id;
+        todos.readOne(id, (err, readTodo) => {
+          expect(readTodo).to.deep.equal({ id, text: todoText });
+          done();
+        });
+      });
+    });
   });
 
   describe('update', () => {
