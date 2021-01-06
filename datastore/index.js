@@ -53,12 +53,20 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
+  let todoPath = path.join(exports.dataDir, id.toString() + '.txt');
   var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
+
+  if (fs.existsSync(todoPath)) {
+    fs.writeFile(todoPath, text, (err) => {
+      if (err) {
+        callback(new Error(`No item with id: ${id}`));
+      } else {
+        callback(null, { id, text });
+      }
+    });
+
   } else {
-    items[id] = text;
-    callback(null, { id, text });
+    callback('non existent id');
   }
 };
 
