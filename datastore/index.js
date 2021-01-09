@@ -4,29 +4,47 @@ const _ = require('underscore');
 const counter = require('./counter');
 const Promise = require('bluebird');
 const promiseFS = Promise.promisifyAll(fs);
+// const promiseCounter = Promise.promisify(counter);
 
 var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  counter.getNextUniqueId((err, id) => {
-    if (err) {
-      throw err;
-    } else {
+  var getNextUniqueIdAsync = Promise.promisify(counter.getNextUniqueId);
+
+
+  getNextUniqueIdAsync()
+    .then((id) => {
       let filename = path.join(exports.dataDir, id.toString() + '.txt');
-
-      fs.writeFile(filename, text, (err) => {
-        if (err) {
-          throw ('error writing todo');
-        } else {
-          items[id] = text;
+      return promiseFS.writeFileAsync(filename, text)
+        .then(() => {
           callback(null, { id, text });
-        }
+        });
+    })
+    .catch((err) => {
+      callback(err, null);
+    });
 
-      });
-    }
-  });
+
+  // counter.getNextUniqueId((err, id) => {
+  //   if (err) {
+  //     throw err;
+  //   } else {
+  //     let filename = path.join(exports.dataDir, id.toString() + '.txt');
+
+  //     fs.writeFile(filename, text, (err) => {
+  //       if (err) {
+  //         throw ('error writing todo');
+  //       } else {
+  //         items[id] = text;
+  //         callback(null, { id, text });
+  //       }
+
+  //     });
+  //   }
+  // });
+
 };
 
 exports.readAll = (callback) => {
