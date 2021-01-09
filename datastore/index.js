@@ -73,13 +73,23 @@ exports.readAll = (callback) => {
 exports.readOne = (id, callback) => {
 
   let todoPath = path.join(exports.dataDir, id.toString() + '.txt');
-  fs.readFile(todoPath, 'utf8', (err, text) => {
-    if (err) {
-      callback(new Error(`No item with id: ${id}`));
-    } else {
+
+  promiseFS.readFileAsync(todoPath, 'utf8')
+    .then((text) => {
       callback(null, { id, text });
-    }
-  });
+    })
+    .catch((err) => {
+      callback(err);
+    });
+
+
+  // fs.readFile(todoPath, 'utf8', (err, text) => {
+  //   if (err) {
+  //     callback(new Error(`No item with id: ${id}`));
+  //   } else {
+  //     callback(null, { id, text });
+  //   }
+  // });
 };
 
 exports.update = (id, text, callback) => {
